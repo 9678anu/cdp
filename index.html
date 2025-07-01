@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerDesk Pro</title>
+    <style>
+        :root {
+            --primary: #0096FF;
+            --primary-dark: #0077CC;
+            --secondary: #F0F2F5;
+            --text: #2D3748;
+            --text-light: #718096;
+            --white: #FFFFFF;
+            --border: #E2E8F0;
+            --danger: #FF4444;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --radius: 10px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --sidebar-width: 280px;
+            --online: #4CAF50;
+            --offline: #F44336;
+            --away: #FFC107;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: #F7FAFC;
+            color: var(--text);
+            line-height: 1.6;
+            overscroll-behavior: none;
+        }
+
+        body.dark-mode {
+            --secondary: #2D3748;
+            --text: #F7FAFC;
+            --text-light: #CBD5E0;
+            --white: #1A202C;
+            --border: #4A5568;
+            background: #1A202C;
+        }
+
+        /* Top Navigation */
+        .top-bar {
+            height: 60px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .address-bar {
+            flex: 1;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .address-input {
+            width: 100%;
+            padding: 12px 20px 12px 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .address-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 150, 255, 0.2);
+        }
+
+        .address-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .top-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 1px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .top-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            border: 2px solid var(--white);
+        }
+
+        .status-online { background: var(--online); }
+        .status-offline { background: var(--offline); }
+        .status-away { background: var(--away); }
+
+        /* Main Layout */
+        .app-container {
+            display: flex;
+            padding-top: 60px;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--white);
+            height: 100%;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            transition: var(--transition);
+        }
+
+        .nav-section {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-title {
+            padding: 0 20px 10px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            cursor: pointer;
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: var(--secondary);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 150, 255, 0.1);
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .contact-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            position: absolute;
+            left: 38px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .contact-online { background: var(--online); }
+        .contact-offline { background: var(--offline); }
+        .contact-away { background: var(--away); }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            background: var(--secondary);
+        }
+
+        /* Connection Card */
+        .connection-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .connection-id-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .connection-id-label {
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .connection-id {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 8px 0;
+            color: var(--text);
+            font-family: monospace;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            color: var(--success);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: var(--secondary);
+        }
+
+        .connection-form {
+            margin-top: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--white);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 150, 255, 0.2);
+        }
+
+        /* File Upload */
+        .file-upload-container {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            background: var(--white);
+            transition: var(--transition);
+            margin-bottom: 16px;
+        }
+
+        .file-upload-container.dragover {
+            border-color: var(--primary);
+            background: rgba(0, 150, 255, 0.05);
+        }
+
+        /* File List */
+        .file-list {
+            margin-bottom: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            background: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--primary);
+        }
+
+        .file-info {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .file-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--secondary);
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .file-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Recent Sessions */
+        .recent-sessions {
+            margin-top: 32px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .session-list {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .session-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .session-item:last-child {
+            border-bottom: none;
+        }
+
+        .session-item:hover {
+            background: var(--secondary);
+        }
+
+        .session-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .session-info {
+            flex: 1;
+        }
+
+        .session-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .session-meta {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        .session-meta i {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+
+        .session-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .session-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .session-btn:hover {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+
+        /* Hidden Features */
+        .hidden-features {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+        }
+
+        .hidden-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 150, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .hidden-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 150, 255, 0.4);
+        }
+
+        .hidden-panel {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            width: 220px;
+            padding: 10px 0;
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .hidden-panel.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hidden-feature {
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .hidden-feature:hover {
+            background: var(--secondary);
+        }
+
+        .hidden-feature i {
+            margin-right: 10px;
+            color: var(--primary);
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Modals */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .modal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-light);
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .modal-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .modal-form .form-input {
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .modal-form .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .modal-footer {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .modal-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .modal-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Settings */
+        .settings-section {
+            margin-bottom: 24px;
+        }
+
+        .settings-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-label {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .setting-description {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--border);
+            border-radius: 24px;
+            transition: var(--transition);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background: var(--white);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        input:checked + .slider {
+            background: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            z-index: 1100;
+            max-width: 350px;
+            transform: translateX(150%);
+            transition: var(--transition);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .notification-success .notification-icon { color: var(--success); }
+        .notification-warning .notification-icon { color: var(--warning); }
+        .notification-danger .notification-icon { color: var(--danger); }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .notification-message {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .notification-close {
+            margin-left: 12px;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .notification-close:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                top: 60px;
+                height: calc(100vh - 60px);
+                z-index: 90;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .connection-card {
+                padding: 16px;
+            }
+
+            .address-bar {
+                margin: 0 12px;
+            }
+
+            .top-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-bar {
+                padding: 0 8px;
+            }
+
+            .logo {
+                font-size: 16px;
+            }
+
+            .address-input {
+                font-size: 12px;
+                padding: 10px 16px 10px 36px;
+            }
+
+            .connection-id {
+                font-size: 24px;
+            }
+
+            .hidden-features {
+                bottom: 16px;
+                right: 16px;
+            }
+
+            .hidden-btn {
+                width: 48px;
+                height: 48px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo">
+            <i class="fas fa-desktop"></i>
+            <span>PowerDesk Pro</span>
+        </div>
+        
+        <div class="address-bar">
+            <i class="fas fa-search address-icon"></i>
+            <input type="text" class="address-input" placeholder="user@example.com or Partner ID" id="remoteAddress">
+        </div>
+        
+        <div class="top-actions">
+            <button class="top-btn" title="Toggle Sidebar" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+            <button class="top-btn" title="Connect" id="connectTopBtn">
+                <i class="fas fa-plug"></i>
+            </button>
+            <button class="top-btn" title="Disconnect" id="disconnectTopBtn">
+                <i class="fas fa-power-off"></i>
+            </button>
+            <button class="top-btn" title="Refresh" id="refreshTopBtn">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        
+        <div class="user-menu">
+            <div class="user-avatar">AK</div>
+            <div class="status-dot status-online" id="userStatus"></div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="nav-section">
+                <div class="nav-title">Navigation</div>
+                <a href="#" class="nav-item active" data-section="home">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="nav-item" data-section="my-computer">
+                    <i class="fas fa-desktop"></i>
+                    <span>My Computer</span>
+                </a>
+                <a href="#" class="nav-item" data-section="address-book">
+                    <i class="fas fa-address-book"></i>
+                    <span>Address Book</span>
+                </a>
+                <a href="#" class="nav-item" data-section="file-transfer">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>File Transfer</span>
+                </a>
+                <a href="#" class="nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="#" class="nav-item" data-section="account">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Account</span>
+                </a>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Online Contacts</div>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>John Doe</span>
+                    <div class="contact-status contact-online"></div>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>Sarah Smith</span>
+                    <div class="contact-status contact-away"></div>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>Mike Johnson</span>
+                    <div class="contact-status contact-offline"></div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Home -->
+            <div class="connection-card" id="homeContent">
+                <div class="card-header">
+                    <h2 class="card-title">Remote Desktop Connection</h2>
+                    <p class="card-subtitle">Access computers remotely with high performance</p>
+                </div>
+                
+                <div class="connection-id-container">
+                    <span class="connection-id-label">Your Connection ID</span>
+                    <div class="connection-id" id="connectionId">123-456-789</div>
+                    <div class="connection-status">
+                        <div class="status-dot"></div>
+                        <span id="connectionStatus">Ready to connect</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="copyIdBtn">
+                        <i class="fas fa-copy"></i> Copy ID
+                    </button>
+                    <button class="btn btn-outline" id="shareIdBtn">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+                
+                <div class="connection-form">
+                    <div class="form-group">
+                        <label class="form-label">Connect to Remote Partner</label>
+                        <input type="text" class="form-input" placeholder="Enter partner ID or address" id="partnerIdInput">
+                    </div>
+                    <button class="btn btn-primary" id="connectBtn" style="width: 100%;">
+                        <i class="fas fa-plug"></i> Connect Now
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Recent Sessions -->
+            <div class="recent-sessions">
+                <div class="section-header">
+                    <h3 class="section-title">Recent Sessions</h3>
+                    <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;">
+                        <i class="fas fa-history"></i> View All
+                    </button>
+                </div>
+                
+                <div class="session-list">
+                    <div class="session-item">
+                        <div class="session-avatar">JD</div>
+                        <div class="session-info">
+                            <div class="session-name">John's Desktop</div>
+                            <div class="session-meta">
+                                <i class="fas fa-clock"></i>
+                                <span>Connected 2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="session-actions">
+                            <button class="session-btn" title="Reconnect">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="session-btn" title="Remove">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="session-item">
+                        <div class="session-avatar">SM</div>
+                        <div class="session-info">
+                            <div class="session-name">Sarah's Laptop</div>
+                            <div class="session-meta">
+                                <i class="fas fa-clock"></i>
+                                <span>Connected yesterday</span>
+                            </div>
+                        </div>
+                        <div class="session-actions">
+                            <button class="session-btn" title="Reconnect">
+                                <i class="fas fa-redo"></i>
+                            </button>
+                            <button class="session-btn" title="Remove">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Computer -->
+            <div class="connection-card" id="myComputerContent" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">My Computer</h2>
+                    <p class="card-subtitle">Manage your local computer settings</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Computer Name</label>
+                    <input type="text" class="form-input" value="My Desktop" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <div class="connection-status">
+                        <div class="status-dot"></div>
+                        <span>Online</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Book -->
+            <div class="connection-card" id="addressBookContent" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">Address Book</h2>
+                    <p class="card-subtitle">Manage your contacts</p>
+                </div>
+                <div class="session-list">
+                    <div class="session-item">
+                        <div class="session-avatar">JD</div>
+                        <div class="session-info">
+                            <div class="session-name">John Doe</div>
+                            <div class="session-meta">
+                                <i class="fas fa-circle" style="color: var(--online);"></i>
+                                <span>Online</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="session-item">
+                        <div class="session-avatar">SS</div>
+                        <div class="session-info">
+                            <div class="session-name">Sarah Smith</div>
+                            <div class="session-meta">
+                                <i class="fas fa-circle" style="color: var(--away);"></i>
+                                <span>Away</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Transfer -->
+            <div class="connection-card" id="fileTransferContent" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">File Transfer</h2>
+                    <p class="card-subtitle">Securely transfer files to remote computers</p>
+                </div>
+                <div class="file-upload-container" id="fileDropArea">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 24px; margin-bottom: 12px;"></i>
+                    <p>Drag & drop files or click to select</p>
+                    <input type="file" id="fileInput" multiple style="display: none;">
+                </div>
+                <div class="file-list" id="fileList"></div>
+                <div class="transfer-actions">
+                    <button class="btn btn-primary" id="uploadBtn" style="flex: 1;">
+                        <i class="fas fa-upload"></i> Upload Files
+                    </button>
+                    <button class="btn btn-outline" id="clearFilesBtn" style="flex: 1;">
+                        <i class="fas fa-trash"></i> Clear List
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="connection-card" id="settingsContent" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">Application Settings</h2>
+                    <p class="card-subtitle">Customize your PowerDesk experience</p>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-title">Appearance</h3>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Dark Mode</div>
+                            <div class="setting-description">Switch between light and dark theme</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="darkModeToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Theme Color</div>
+                            <div class="setting-description">Choose your primary color</div>
+                        </div>
+                        <select class="form-input" id="themeColorSelect" style="width: 150px; padding: 10px;">
+                            <option value="#0096FF">Blue</option>
+                            <option value="#4CAF50">Green</option>
+                            <option value="#9C27B0">Purple</option>
+                            <option value="#FF4444">Red</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-title">Security</h3>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Two-Factor Authentication</div>
+                            <div class="setting-description">Add extra security to your account</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="twoFactorToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Auto-Lock</div>
+                            <div class="setting-description">Lock app after inactivity</div>
+                        </div>
+                        <select class="form-input" style="width: 150px; padding: 10px;">
+                            <option>Never</option>
+                            <option>5 minutes</option>
+                            <option>15 minutes</option>
+                            <option>30 minutes</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-title">Connection</h3>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Quality Preference</div>
+                            <div class="setting-description">Balance between quality and performance</div>
+                        </div>
+                        <select class="form-input" style="width: 150px; padding: 10px;">
+                            <option>Automatic</option>
+                            <option>Best Quality</option>
+                            <option>Best Performance</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-label">Remote Sound</div>
+                            <div class="setting-description">Play sounds from remote computer</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="remoteSoundToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" id="saveSettingsBtn" style="width: 100%; margin-top: 24px;">
+                    <i class="fas fa-save"></i> Save Settings
+                </button>
+            </div>
+
+            <!-- Account -->
+            <div class="connection-card" id="accountContent" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">Account</h2>
+                    <p class="card-subtitle">Manage your account settings</p>
+                </div>
+                <button class="btn btn-primary" id="loginBtn" style="width: 100%; margin-bottom: 16px;">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+                <button class="btn btn-outline" id="signupBtn" style="width: 100%;">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </div>
+        </div>
+
+        <!-- Hidden Features Panel -->
+        <div class="hidden-features">
+            <button class="hidden-btn" id="hiddenBtn">
+                <i class="fas fa-ellipsis-h"></i>
+            </button>
+            <div class="hidden-panel" id="hiddenPanel">
+                <div class="hidden-feature" id="recordBtn">
+                    <i class="fas fa-video"></i>
+                    <span>Start Recording</span>
+                </div>
+                <div class="hidden-feature" id="screenshotBtn">
+                    <i class="fas fa-camera"></i>
+                    <span>Take Screenshot</span>
+                </div>
+                <div class="hidden-feature" id="shareBtn">
+                    <i class="fas fa-share-square"></i>
+                    <span>Share Screen</span>
+                </div>
+                <div class="hidden-feature" id="fileBtn">
+                    <i class="fas fa-file-import"></i>
+                    <span>File Transfer</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Transfer Modal -->
+        <div class="modal" id="fileModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">File Transfer</h3>
+                    <button class="modal-close" id="closeFileModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="file-upload-container" id="modalFileDropArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 24px; margin-bottom: 12px;"></i>
+                        <p>Drag & drop files or click to select</p>
+                        <input type="file" id="modalFileInput" multiple style="display: none;">
+                    </div>
+                    <div class="file-list" id="modalFileList"></div>
+                    <div class="transfer-actions">
+                        <button class="btn btn-primary" id="modalUploadBtn" style="flex: 1;">
+                            <i class="fas fa-upload"></i> Upload Files
+                        </button>
+                        <button class="btn btn-outline" id="modalClearFilesBtn" style="flex: 1;">
+                            <i class="fas fa-trash"></i> Clear List
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Modal -->
+        <div class="modal" id="loginModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Sign In to PowerDesk</h3>
+                    <button class="modal-close" id="closeLoginModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalLoginForm" class="modal-form">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" placeholder="your@email.com" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input" placeholder="••••••••" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                        <div class="modal-footer">
+                            <span>Don't have an account? </span>
+                            <a href="#" id="showSignup">Sign up</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div class="modal" id="signupModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Create Account</h3>
+                    <button class="modal-close" id="closeSignupModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalSignupForm" class="modal-form">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-input" placeholder="John Doe" id="signupName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input" placeholder="your@email.com" id="signupEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input" placeholder="••••••••" id="signupPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-input" placeholder="••••••••" id="signupConfirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                        <div class="modal-footer">
+                            <span>Already have an account? </span>
+                            <a href="#" id="showLogin">Sign in</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification -->
+        <div class="notification" id="notification">
+            <i class="fas fa-bell notification-icon"></i>
+            <div class="notification-content">
+                <div class="notification-title" id="notificationTitle">Notification</div>
+                <div class="notification-message" id="notificationMessage"></div>
+            </div>
+            <i class="fas fa-times notification-close" id="closeNotification"></i>
+        </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Core elements
+        const sidebar = document.getElementById('sidebar');
+        const remoteAddress = document.getElementById('remoteAddress');
+        const fileInput = document.getElementById('fileInput');
+        const modalFileInput = document.getElementById('modalFileInput');
+        const fileList = document.getElementById('fileList');
+        const modalFileList = document.getElementById('modalFileList');
+        const fileDropArea = document.getElementById('fileDropArea');
+        const modalFileDropArea = document.getElementById('modalFileDropArea');
+        const userStatus = document.getElementById('userStatus');
+        let filesToUpload = [];
+
+        // Notification
+        function showNotification(title, message, type) {
+            const notification = document.getElementById('notification');
+            notification.className = `notification notification-${type}`;
+            document.getElementById('notificationTitle').textContent = title;
+            document.getElementById('notificationMessage').textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 5000);
+        }
+
+        document.getElementById('closeNotification').addEventListener('click', () => {
+            document.getElementById('notification').classList.remove('show');
+        });
+
+        // User status simulation
+        setInterval(() => {
+            const statuses = ['status-online', 'status-away', 'status-offline'];
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            userStatus.className = 'status-dot ' + randomStatus;
+            if (randomStatus === 'status-online') {
+                showNotification('User Online', 'Your computer is now online', 'success');
+            }
+        }, 15000);
+
+        // Sidebar toggle
+        document.getElementById('toggleSidebar').addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                document.querySelectorAll('.connection-card').forEach(card => card.style.display = 'none');
+                document.getElementById(`${item.dataset.section}Content`).style.display = 'block';
+            });
+        });
+
+        // Dynamic address bar
+        remoteAddress.addEventListener('input', () => {
+            document.getElementById('partnerIdInput').value = remoteAddress.value;
+        });
+
+        document.getElementById('partnerIdInput').addEventListener('input', () => {
+            remoteAddress.value = document.getElementById('partnerIdInput').value;
+        });
+
+        // File handling
+        function setupFileDrop(area, input, list) {
+            area.addEventListener('click', () => input.click());
+            area.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                area.classList.add('dragover');
+            });
+            area.addEventListener('dragleave', () => {
+                area.classList.remove('dragover');
+            });
+            area.addEventListener('drop', (e) => {
+                e.preventDefault();
+                area.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files, list);
+            });
+            input.addEventListener('change', () => handleFiles(input.files, list));
+        }
+
+        function handleFiles(files, list) {
+            Array.from(files).forEach(file => {
+                filesToUpload.push(file);
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                const iconClass = getFileIcon(file.name);
+                fileItem.innerHTML = `
+                    <div class="file-icon"><i class="fas ${iconClass}"></i></div>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="file-btn download-btn" title="Download"><i class="fas fa-download"></i></button>
+                        <button class="file-btn delete-btn" title="Delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                list.appendChild(fileItem);
+
+                fileItem.querySelector('.download-btn').addEventListener('click', () => {
+                    const url = URL.createObjectURL(file);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = file.name;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showNotification('Download', `${file.name} downloading`, 'success');
+                });
+
+                fileItem.querySelector('.delete-btn').addEventListener('click', () => {
+                    list.removeChild(fileItem);
+                    filesToUpload = filesToUpload.filter(f => f !== file);
+                    showNotification('Removed', `${file.name} removed`, 'warning');
+                });
+            });
+        }
+
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            switch (ext) {
+                case 'pdf': return 'fa-file-pdf';
+                case 'doc': case 'docx': return 'fa-file-word';
+                case 'jpg': case 'jpeg': case 'png': return 'fa-file-image';
+                default: return 'fa-file';
+            }
+        }
+
+        setupFileDrop(fileDropArea, fileInput, fileList);
+        setupFileDrop(modalFileDropArea, modalFileInput, modalFileList);
+
+        // Upload files
+        function uploadFiles(list, input) {
+            if (!filesToUpload.length) {
+                showNotification('No Files', 'Please select files to upload', 'warning');
+                return;
+            }
+            showNotification('Uploading', 'Files are being uploaded', 'success');
+            setTimeout(() => {
+                list.innerHTML = '';
+                input.value = '';
+                filesToUpload = [];
+                showNotification('Success', 'Files uploaded successfully', 'success');
+            }, 2000);
+        }
+
+        document.getElementById('uploadBtn').addEventListener('click', () => uploadFiles(fileList, fileInput));
+        document.getElementById('modalUploadBtn').addEventListener('click', () => uploadFiles(modalFileList, modalFileInput));
+
+        // Clear files
+        function clearFiles(list, input) {
+            list.innerHTML = '';
+            input.value = '';
+            filesToUpload = [];
+            showNotification('Cleared', 'File list cleared', 'warning');
+        }
+
+        document.getElementById('clearFilesBtn').addEventListener('click', () => clearFiles(fileList, fileInput));
+        document.getElementById('modalClearFilesBtn').addEventListener('click', () => clearFiles(modalFileList, modalFileInput));
+
+        // Hidden features
+        const hiddenBtn = document.getElementById('hiddenBtn');
+        const hiddenPanel = document.getElementById('hiddenPanel');
+
+        hiddenBtn.addEventListener('click', () => {
+            hiddenPanel.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!hiddenBtn.contains(e.target) && !hiddenPanel.contains(e.target)) {
+                hiddenPanel.classList.remove('show');
+            }
+        });
+
+        // Screenshot
+        document.getElementById('screenshotBtn').addEventListener('click', () => {
+            hiddenPanel.classList.remove('show');
+            html2canvas(document.body).then(canvas => {
+                canvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `screenshot-${new Date().toISOString()}.png`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showNotification('Screenshot', 'Screenshot saved', 'success');
+                });
+            });
+        });
+
+        // Screen sharing
+        document.getElementById('shareBtn').addEventListener('click', async () => {
+            hiddenPanel.classList.remove('show');
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                showNotification('Screen Sharing', 'Started sharing screen', 'success');
+                stream.getVideoTracks()[0].onended = () => {
+                    showNotification('Screen Sharing', 'Stopped sharing screen', 'warning');
+                };
+            } catch (err) {
+                showNotification('Error', 'Failed to share screen', 'danger');
+            }
+        });
+
+        // Screen recording
+        document.getElementById('recordBtn').addEventListener('click', async () => {
+            hiddenPanel.classList.remove('show');
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                const recorder = new MediaRecorder(stream);
+                const chunks = [];
+                recorder.ondataavailable = e => chunks.push(e.data);
+                recorder.onstop = () => {
+                    const blob = new Blob(chunks, { type: 'video/webm' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `recording-${new Date().toISOString()}.webm`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    showNotification('Recording', 'Recording saved', 'success');
+                };
+                recorder.start();
+                showNotification('Recording', 'Started recording screen', 'success');
+                setTimeout(() => recorder.stop(), 10000); // Auto-stop after 10s for demo
+            } catch (err) {
+                showNotification('Error', 'Failed to start recording', 'danger');
+            }
+        });
+
+        // File transfer modal
+        document.getElementById('fileBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            hiddenPanel.classList.remove('show');
+            document.getElementById('fileModal').classList.add('show');
+        });
+
+        // Copy and Share ID
+        document.getElementById('copyIdBtn').addEventListener('click', () => {
+            navigator.clipboard.writeText(document.getElementById('connectionId').textContent.replace(/-/g, '')).then(() => {
+                showNotification('Copied', 'Connection ID copied to clipboard', 'success');
+            });
+        });
+
+        document.getElementById('shareIdBtn').addEventListener('click', () => {
+            const id = document.getElementById('connectionId').textContent.replace(/-/g, '');
+            if (navigator.share) {
+                navigator.share({
+                    title: 'PowerDesk Connection ID',
+                    text: `Connect using ID: ${id}`,
+                }).then(() => showNotification('Shared', 'ID shared successfully', 'success'))
+                 .catch(() => showNotification('Error', 'Failed to share ID', 'danger'));
+            } else {
+                navigator.clipboard.writeText(id).then(() => {
+                    showNotification('Copied', 'ID copied (share not supported)', 'warning');
+                });
+            }
+        });
+
+        // Connect
+        document.getElementById('connectBtn').addEventListener('click', () => {
+            const partnerId = document.getElementById('partnerIdInput').value.trim();
+            if (!partnerId) {
+                showNotification('Error', 'Please enter a partner ID', 'danger');
+                return;
+            }
+            remoteAddress.value = partnerId;
+            showNotification('Connecting', `Establishing connection to ${partnerId}`, 'success');
+        });
+
+        document.getElementById('connectTopBtn').addEventListener('click', () => {
+            const partnerId = remoteAddress.value.trim();
+            if (!partnerId) {
+                showNotification('Error', 'Please enter a partner ID', 'danger');
+                return;
+            }
+            document.getElementById('partnerIdInput').value = partnerId;
+            showNotification('Connecting', `Establishing connection to ${partnerId}`, 'success');
+        });
+
+        // Disconnect
+        document.getElementById('disconnectTopBtn').addEventListener('click', () => {
+            showNotification('Disconnected', 'Connection terminated', 'warning');
+            remoteAddress.value = '';
+            document.getElementById('partnerIdInput').value = '';
+        });
+
+        // Refresh
+        document.getElementById('refreshTopBtn').addEventListener('click', () => {
+            showNotification('Refreshed', 'Connection status updated', 'success');
+        });
+
+        // Modals
+        document.getElementById('closeFileModal').addEventListener('click', () => {
+            document.getElementById('fileModal').classList.remove('show');
+        });
+
+        document.getElementById('loginBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('loginModal').classList.add('show');
+        });
+
+        document.getElementById('signupBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('signupModal').classList.add('show');
+        });
+
+        document.getElementById('closeLoginModal').addEventListener('click', () => {
+            document.getElementById('loginModal').classList.remove('show');
+        });
+
+        document.getElementById('closeSignupModal').addEventListener('click', () => {
+            document.getElementById('signupModal').classList.remove('show');
+        });
+
+        document.getElementById('showSignup').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('loginModal').classList.remove('show');
+            document.getElementById('signupModal').classList.add('show');
+        });
+
+        document.getElementById('showLogin').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('signupModal').classList.remove('show');
+            document.getElementById('loginModal').classList.add('show');
+        });
+
+        // Form submissions
+        document.getElementById('modalLoginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            if (!email || !password) {
+                showNotification('Error', 'Please fill in all fields', 'danger');
+                return;
+            }
+            document.getElementById('loginModal').classList.remove('show');
+            showNotification('Login Successful', 'You have been signed in to PowerDesk', 'success');
+        });
+
+        document.getElementById('modalSignupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            const confirmPassword = document.getElementById('signupConfirmPassword').value.trim();
+            if (!name || !email || !password || !confirmPassword) {
+                showNotification('Error', 'Please fill in all fields', 'danger');
+                return;
+            }
+            if (password !== confirmPassword) {
+                showNotification('Error', 'Passwords do not match', 'danger');
+                return;
+            }
+            document.getElementById('signupModal').classList.remove('show');
+            document.getElementById('loginModal').classList.add('show');
+            showNotification('Account Created', 'Please sign in with your new account', 'success');
+        });
+
+        // Settings save
+        document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+            const themeColor = document.getElementById('themeColorSelect').value;
+            document.documentElement.style.setProperty('--primary', themeColor);
+            document.documentElement.style.setProperty('--primary-dark', darkenColor(themeColor, 10));
+            showNotification('Settings Saved', 'Your preferences have been updated', 'success');
+        });
+
+        function darkenColor(hex, percent) {
+            const num = parseInt(hex.replace('#', ''), 16);
+            const r = (num >> 16) * (1 - percent / 100);
+            const g = ((num >> 8) & 0x00FF) * (1 - percent / 100);
+            const b = (num & 0x0000FF) * (1 - percent / 100);
+            return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
+        }
+
+        // Close modals on outside click
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
+            }
+        });
+
+        // Dark mode
+        document.getElementById('darkModeToggle').addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Responsive handling
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
