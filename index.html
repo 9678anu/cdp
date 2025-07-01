@@ -6,43 +6,46 @@
     <title>PowerDesk Pro</title>
     <style>
         :root {
-            --primary: #0096FF;
-            --primary-dark: #0077CC;
-            --secondary: #F0F2F5;
-            --text: #2D3748;
-            --text-light: #718096;
+            --primary: #1E88E5;
+            --primary-dark: #1565C0;
+            --secondary: #F5F7FA;
+            --text: #1A202C;
+            --text-light: #4A5568;
             --white: #FFFFFF;
             --border: #E2E8F0;
-            --danger: #FF4444;
-            --success: #4CAF50;
-            --warning: #FF9800;
-            --radius: 10px;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --danger: #EF5350;
+            --success: #43A047;
+            --warning: #FB8C00;
+            --radius: 12px;
+            --shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
             --sidebar-width: 280px;
-            --online: #4CAF50;
-            --offline: #F44336;
-            --away: #FFC107;
-            --transition: all 0.3s ease;
+            --online: #43A047;
+            --offline: #EF5350;
+            --away: #FB8C00;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background: #F7FAFC;
+            background: var(--secondary);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.5;
             overscroll-behavior: none;
+            display: flex;
+            justify-content: center;
+            width: 100%;
         }
 
         body.dark-mode {
             --secondary: #2D3748;
             --text: #F7FAFC;
-            --text-light: #CBD5E0;
+            --text-light: #A0AEC0;
             --white: #1A202C;
             --border: #4A5568;
             background: #1A202C;
@@ -50,15 +53,17 @@
 
         /* Top Navigation */
         .top-bar {
-            height: 60px;
+            height: 64px;
             background: var(--white);
             box-shadow: var(--shadow);
             display: flex;
             align-items: center;
-            padding: 0 20px;
+            padding: 0 24px;
             position: fixed;
             width: 100%;
-            z-index: 100;
+            max-width: 1400px;
+            z-index: 1000;
+            margin: 0 auto;
         }
 
         .logo {
@@ -66,34 +71,35 @@
             align-items: center;
             color: var(--primary);
             font-weight: 700;
-            font-size: 20px;
+            font-size: 1.25rem;
+            letter-spacing: -0.025em;
         }
 
         .logo i {
-            margin-right: 10px;
-            font-size: 24px;
+            margin-right: 12px;
+            font-size: 1.5rem;
         }
 
         .address-bar {
             flex: 1;
-            margin: 0 20px;
+            margin: 0 24px;
             position: relative;
         }
 
         .address-input {
             width: 100%;
-            padding: 12px 20px 12px 40px;
-            border-radius: 20px;
+            padding: 10px 20px 10px 40px;
+            border-radius: 8px;
             border: 1px solid var(--border);
             background: var(--white);
-            font-size: 14px;
+            font-size: 0.875rem;
             transition: var(--transition);
         }
 
         .address-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 150, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2);
         }
 
         .address-icon {
@@ -102,18 +108,18 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-light);
-            font-size: 16px;
+            font-size: 1rem;
         }
 
         .top-actions {
             display: flex;
-            gap: 8px;
+            gap: 12px;
         }
 
         .top-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
             background: var(--white);
             border: 1px solid var(--border);
             color: var(--text);
@@ -133,13 +139,13 @@
         .user-menu {
             display: flex;
             align-items: center;
-            margin-left: 15px;
+            margin-left: 16px;
             position: relative;
         }
 
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: var(--primary);
             color: var(--white);
@@ -147,12 +153,13 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
         }
 
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             position: absolute;
             bottom: 0;
@@ -167,30 +174,42 @@
         /* Main Layout */
         .app-container {
             display: flex;
-            padding-top: 60px;
-            height: 100vh;
+            padding-top: 64px;
+            min-height: 100vh;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
         }
 
         /* Sidebar */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--white);
-            height: 100%;
             border-right: 1px solid var(--border);
             overflow-y: auto;
-            transition: var(--transition);
+            transform: translateX(0);
+            transition: transform var(--transition);
+            position: fixed;
+            top: 64px;
+            left: 0;
+            z-index: 900;
+            height: calc(100vh - 64px);
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
         }
 
         .nav-section {
-            padding: 20px 0;
+            padding: 24px 0;
             border-bottom: 1px solid var(--border);
         }
 
         .nav-title {
-            padding: 0 20px 10px;
-            font-size: 12px;
+            padding: 0 24px 12px;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
             color: var(--text-light);
             font-weight: 600;
         }
@@ -198,7 +217,7 @@
         .nav-item {
             display: flex;
             align-items: center;
-            padding: 12px 20px;
+            padding: 12px 24px;
             cursor: pointer;
             color: var(--text);
             text-decoration: none;
@@ -211,14 +230,15 @@
         }
 
         .nav-item.active {
-            background: rgba(0, 150, 255, 0.1);
+            background: rgba(30, 136, 229, 0.1);
             color: var(--primary);
             border-left: 4px solid var(--primary);
+            padding-left: 20px;
         }
 
         .nav-item i {
             margin-right: 12px;
-            font-size: 18px;
+            font-size: 1.125rem;
             width: 24px;
             text-align: center;
         }
@@ -228,21 +248,27 @@
             height: 8px;
             border-radius: 50%;
             position: absolute;
-            left: 38px;
+            left: 44px;
             top: 50%;
             transform: translateY(-50%);
         }
 
-        .contact-online { background: var(--online); }
-        .contact-offline { background: var(--offline); }
-        .contact-away { background: var(--away); }
-
         /* Main Content */
         .main-content {
             flex: 1;
-            padding: 24px;
-            overflow-y: auto;
+            padding: 32px;
             background: var(--secondary);
+            min-height: calc(100vh - 64px);
+            max-width: 1120px;
+            margin-left: var(--sidebar-width);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
         }
 
         /* Connection Card */
@@ -250,8 +276,8 @@
             background: var(--white);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 24px;
-            max-width: 600px;
+            padding: 32px;
+            max-width: 640px;
             margin: 0 auto;
         }
 
@@ -261,7 +287,7 @@
         }
 
         .card-title {
-            font-size: 24px;
+            font-size: 1.5rem;
             color: var(--primary);
             font-weight: 600;
             margin-bottom: 8px;
@@ -269,26 +295,26 @@
 
         .card-subtitle {
             color: var(--text-light);
-            font-size: 14px;
+            font-size: 0.875rem;
         }
 
         .connection-id-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 20px 0;
+            margin: 24px 0;
         }
 
         .connection-id-label {
             color: var(--text-light);
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 500;
         }
 
         .connection-id {
-            font-size: 28px;
+            font-size: 1.75rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
             margin: 8px 0;
             color: var(--text);
             font-family: monospace;
@@ -299,12 +325,12 @@
             align-items: center;
             color: var(--success);
             font-weight: 500;
-            font-size: 14px;
+            font-size: 0.875rem;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background: var(--success);
             border-radius: 50%;
             margin-right: 8px;
@@ -320,17 +346,17 @@
         .action-buttons {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 16px;
             margin: 24px 0;
         }
 
         .btn {
             padding: 12px 24px;
-            border-radius: var(--radius);
+            border-radius: 8px;
             border: none;
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 0.875rem;
             transition: var(--transition);
             display: flex;
             align-items: center;
@@ -370,7 +396,7 @@
 
         .form-label {
             display: block;
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 500;
             margin-bottom: 8px;
             color: var(--text);
@@ -380,23 +406,23 @@
             width: 100%;
             padding: 12px;
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: 8px;
             background: var(--white);
-            font-size: 14px;
+            font-size: 0.875rem;
             transition: var(--transition);
         }
 
         .form-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 150, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2);
         }
 
         /* File Upload */
         .file-upload-container {
             border: 2px dashed var(--border);
             border-radius: var(--radius);
-            padding: 20px;
+            padding: 24px;
             text-align: center;
             background: var(--white);
             transition: var(--transition);
@@ -405,12 +431,12 @@
 
         .file-upload-container.dragover {
             border-color: var(--primary);
-            background: rgba(0, 150, 255, 0.05);
+            background: rgba(30, 136, 229, 0.05);
         }
 
         /* File List */
         .file-list {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .file-item {
@@ -428,7 +454,7 @@
         .file-icon {
             width: 40px;
             height: 40px;
-            border-radius: var(--radius);
+            border-radius: 8px;
             background: var(--secondary);
             display: flex;
             align-items: center;
@@ -443,11 +469,11 @@
 
         .file-name {
             font-weight: 500;
-            font-size: 14px;
+            font-size: 0.875rem;
         }
 
         .file-size {
-            font-size: 12px;
+            font-size: 0.75rem;
             color: var(--text-light);
         }
 
@@ -488,7 +514,7 @@
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 1.125rem;
             color: var(--text);
             font-weight: 600;
         }
@@ -506,10 +532,6 @@
             padding: 16px;
             border-bottom: 1px solid var(--border);
             transition: var(--transition);
-        }
-
-        .session-item:last-child {
-            border-bottom: none;
         }
 
         .session-item:hover {
@@ -536,20 +558,20 @@
 
         .session-name {
             font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 3px;
+            font-size: 0.875rem;
+            margin-bottom: 4px;
         }
 
         .session-meta {
             display: flex;
             align-items: center;
             color: var(--text-light);
-            font-size: 13px;
+            font-size: 0.75rem;
         }
 
         .session-meta i {
-            margin-right: 5px;
-            font-size: 12px;
+            margin-right: 6px;
+            font-size: 0.75rem;
         }
 
         .session-actions {
@@ -578,7 +600,7 @@
             position: fixed;
             bottom: 24px;
             right: 24px;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .hidden-btn {
@@ -589,29 +611,28 @@
             color: var(--white);
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 150, 255, 0.3);
+            box-shadow: var(--shadow);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 1.25rem;
             transition: var(--transition);
         }
 
         .hidden-btn:hover {
             background: var(--primary-dark);
             transform: scale(1.05);
-            box-shadow: 0 6px 16px rgba(0, 150, 255, 0.4);
         }
 
         .hidden-panel {
             position: absolute;
-            bottom: 70px;
+            bottom: 72px;
             right: 0;
             background: var(--white);
             border-radius: var(--radius);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            width: 220px;
-            padding: 10px 0;
+            box-shadow: var(--shadow);
+            width: 240px;
+            padding: 12px 0;
             display: none;
             opacity: 0;
             transform: translateY(10px);
@@ -625,10 +646,11 @@
         }
 
         .hidden-feature {
-            padding: 10px 15px;
+            padding: 12px 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
+            font-size: 0.875rem;
             transition: var(--transition);
         }
 
@@ -637,7 +659,7 @@
         }
 
         .hidden-feature i {
-            margin-right: 10px;
+            margin-right: 12px;
             color: var(--primary);
             width: 20px;
             text-align: center;
@@ -669,8 +691,8 @@
             background: var(--white);
             border-radius: var(--radius);
             width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
+            max-width: 480px;
+            max-height: 90vh;
             overflow-y: auto;
             transform: translateY(20px);
             transition: var(--transition);
@@ -681,7 +703,7 @@
         }
 
         .modal-header {
-            padding: 16px 20px;
+            padding: 16px 24px;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
@@ -689,7 +711,7 @@
         }
 
         .modal-title {
-            font-size: 18px;
+            font-size: 1.125rem;
             font-weight: 600;
             color: var(--primary);
         }
@@ -697,7 +719,7 @@
         .modal-close {
             background: none;
             border: none;
-            font-size: 20px;
+            font-size: 1.25rem;
             color: var(--text-light);
             cursor: pointer;
             width: 32px;
@@ -715,7 +737,7 @@
         }
 
         .modal-body {
-            padding: 20px;
+            padding: 24px;
         }
 
         .modal-form {
@@ -731,11 +753,11 @@
         .modal-form .form-input {
             border-radius: 8px;
             padding: 12px;
-            font-size: 14px;
+            font-size: 0.875rem;
         }
 
         .modal-form .form-label {
-            font-size: 14px;
+            font-size: 0.875rem;
             font-weight: 500;
             margin-bottom: 6px;
         }
@@ -743,7 +765,7 @@
         .modal-footer {
             text-align: center;
             margin-top: 16px;
-            font-size: 13px;
+            font-size: 0.8125rem;
             color: var(--text-light);
         }
 
@@ -763,7 +785,7 @@
         }
 
         .settings-title {
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 600;
             margin-bottom: 12px;
             color: var(--primary);
@@ -779,18 +801,18 @@
 
         .setting-label {
             font-weight: 500;
-            font-size: 14px;
+            font-size: 0.875rem;
         }
 
         .setting-description {
-            font-size: 12px;
+            font-size: 0.75rem;
             color: var(--text-light);
             margin-top: 4px;
         }
 
         .toggle-switch {
             position: relative;
-            width: 50px;
+            width: 48px;
             height: 24px;
         }
 
@@ -828,22 +850,22 @@
         }
 
         input:checked + .slider:before {
-            transform: translateX(26px);
+            transform: translateX(24px);
         }
 
         /* Notifications */
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 24px;
+            right: 24px;
             background: var(--white);
             border-radius: var(--radius);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            padding: 12px 16px;
+            box-shadow: var(--shadow);
+            padding: 16px;
             display: flex;
             align-items: center;
             z-index: 1100;
-            max-width: 350px;
+            max-width: 360px;
             transform: translateX(150%);
             transition: var(--transition);
         }
@@ -854,7 +876,7 @@
 
         .notification-icon {
             margin-right: 12px;
-            font-size: 20px;
+            font-size: 1.25rem;
         }
 
         .notification-success .notification-icon { color: var(--success); }
@@ -867,12 +889,12 @@
 
         .notification-title {
             font-weight: 600;
-            font-size: 14px;
+            font-size: 0.875rem;
             margin-bottom: 2px;
         }
 
         .notification-message {
-            font-size: 12px;
+            font-size: 0.75rem;
             color: var(--text-light);
         }
 
@@ -880,7 +902,7 @@
             margin-left: 12px;
             color: var(--text-light);
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1rem;
             transition: var(--transition);
         }
 
@@ -888,35 +910,63 @@
             color: var(--primary);
         }
 
+        /* Profile Section */
+        .profile-section {
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin: 0 auto 16px;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin-bottom: 4px;
+        }
+
+        .profile-email {
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
-                position: fixed;
-                left: -100%;
-                top: 60px;
-                height: calc(100vh - 60px);
-                z-index: 90;
+                transform: translateX(-100%);
             }
 
             .sidebar.active {
-                left: 0;
+                transform: translateX(0);
             }
 
             .main-content {
-                padding: 16px;
+                padding: 24px;
+                margin-left: 0;
             }
 
             .connection-card {
-                padding: 16px;
+                padding: 24px;
             }
 
             .address-bar {
-                margin: 0 12px;
+                margin: 0 16px;
             }
 
             .top-btn {
-                width: 36px;
-                height: 36px;
+                width: 32px;
+                height: 32px;
             }
 
             .action-buttons {
@@ -931,20 +981,20 @@
 
         @media (max-width: 480px) {
             .top-bar {
-                padding: 0 8px;
+                padding: 0 12px;
             }
 
             .logo {
-                font-size: 16px;
+                font-size: 1rem;
             }
 
             .address-input {
-                font-size: 12px;
-                padding: 10px 16px 10px 36px;
+                font-size: 0.75rem;
+                padding: 8px 16px 8px 32px;
             }
 
             .connection-id {
-                font-size: 24px;
+                font-size: 1.5rem;
             }
 
             .hidden-features {
@@ -968,7 +1018,7 @@
             <span>PowerDesk Pro</span>
         </div>
         
-        <div class="address-bar">
+        <div class="address-bar" id="addressBar" style="display: none;">
             <i class="fas fa-search address-icon"></i>
             <input type="text" class="address-input" placeholder="user@example.com or Partner ID" id="remoteAddress">
         </div>
@@ -988,8 +1038,8 @@
             </button>
         </div>
         
-        <div class="user-menu">
-            <div class="user-avatar">AK</div>
+        <div class="user-menu" id="userMenu" style="display: none;">
+            <div class="user-avatar" id="userAvatar"></div>
             <div class="status-dot status-online" id="userStatus"></div>
         </div>
     </div>
@@ -1049,133 +1099,225 @@
         <!-- Main Content -->
         <div class="main-content">
             <!-- Home -->
-            <div class="connection-card" id="homeContent">
-                <div class="card-header">
-                    <h2 class="card-title">Remote Desktop Connection</h2>
-                    <p class="card-subtitle">Access computers remotely with high performance</p>
-                </div>
-                
-                <div class="connection-id-container">
-                    <span class="connection-id-label">Your Connection ID</span>
-                    <div class="connection-id" id="connectionId">123-456-789</div>
-                    <div class="connection-status">
-                        <div class="status-dot"></div>
-                        <span id="connectionStatus">Ready to connect</span>
+            <div class="content-section active" id="homeContent">
+                <div class="connection-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Remote Desktop Connection</h2>
+                        <p class="card-subtitle">Access computers remotely with high performance</p>
+                    </div>
+                    
+                    <div class="connection-id-container">
+                        <span class="connection-id-label">Your Connection ID</span>
+                        <div class="connection-id" id="connectionId">123-456-789</div>
+                        <div class="connection-status">
+                            <div class="status-dot"></div>
+                            <span id="connectionStatus">Ready to connect</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="copyIdBtn">
+                            <i class="fas fa-copy"></i> Copy ID
+                        </button>
+                        <button class="btn btn-outline" id="shareIdBtn">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                    
+                    <div class="connection-form">
+                        <div class="form-group">
+                            <label class="form-label">Connect to Remote Partner</label>
+                            <input type="text" class="form-input" placeholder="Enter partner ID or address" id="partnerIdInput">
+                        </div>
+                        <button class="btn btn-primary" id="connectBtn" style="width: 100%;">
+                            <i class="fas fa-plug"></i> Connect Now
+                        </button>
                     </div>
                 </div>
                 
-                <div class="action-buttons">
-                    <button class="btn btn-primary" id="copyIdBtn">
-                        <i class="fas fa-copy"></i> Copy ID
-                    </button>
-                    <button class="btn btn-outline" id="shareIdBtn">
-                        <i class="fas fa-share-alt"></i> Share
-                    </button>
-                </div>
-                
-                <div class="connection-form">
-                    <div class="form-group">
-                        <label class="form-label">Connect to Remote Partner</label>
-                        <input type="text" class="form-input" placeholder="Enter partner ID or address" id="partnerIdInput">
+                <div class="recent-sessions">
+                    <div class="section-header">
+                        <h3 class="section-title">Recent Sessions</h3>
+                        <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.8125rem;">
+                            <i class="fas fa-history"></i> View All
+                        </button>
                     </div>
-                    <button class="btn btn-primary" id="connectBtn" style="width: 100%;">
-                        <i class="fas fa-plug"></i> Connect Now
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Recent Sessions -->
-            <div class="recent-sessions">
-                <div class="section-header">
-                    <h3 class="section-title">Recent Sessions</h3>
-                    <button class="btn btn-outline" style="padding: 8px 12px; font-size: 13px;">
-                        <i class="fas fa-history"></i> View All
-                    </button>
-                </div>
-                
-                <div class="session-list">
-                    <div class="session-item">
-                        <div class="session-avatar">JD</div>
-                        <div class="session-info">
-                            <div class="session-name">John's Desktop</div>
-                            <div class="session-meta">
-                                <i class="fas fa-clock"></i>
-                                <span>Connected 2 hours ago</span>
+                    
+                    <div class="session-list">
+                        <div class="session-item">
+                            <div class="session-avatar">JD</div>
+                            <div class="session-info">
+                                <div class="session-name">John's Desktop</div>
+                                <div class="session-meta">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Connected 2 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="session-actions">
+                                <button class="session-btn" title="Reconnect">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <button class="session-btn" title="Remove">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </div>
-                        <div class="session-actions">
-                            <button class="session-btn" title="Reconnect">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                            <button class="session-btn" title="Remove">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="session-item">
-                        <div class="session-avatar">SM</div>
-                        <div class="session-info">
-                            <div class="session-name">Sarah's Laptop</div>
-                            <div class="session-meta">
-                                <i class="fas fa-clock"></i>
-                                <span>Connected yesterday</span>
+                        <div class="session-item">
+                            <div class="session-avatar">SM</div>
+                            <div class="session-info">
+                                <div class="session-name">Sarah's Laptop</div>
+                                <div class="session-meta">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Connected yesterday</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="session-actions">
-                            <button class="session-btn" title="Reconnect">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                            <button class="session-btn" title="Remove">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <div class="session-actions">
+                                <button class="session-btn" title="Reconnect">
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                                <button class="session-btn" title="Remove">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- My Computer -->
-            <div class="connection-card" id="myComputerContent" style="display: none;">
-                <div class="card-header">
-                    <h2 class="card-title">My Computer</h2>
-                    <p class="card-subtitle">Manage your local computer settings</p>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Computer Name</label>
-                    <input type="text" class="form-input" value="My Desktop" readonly>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Status</label>
-                    <div class="connection-status">
-                        <div class="status-dot"></div>
-                        <span>Online</span>
+            <div class="content-section" id="myComputerContent">
+                <div class="connection-card">
+                    <div class="card-header">
+                        <h2 class="card-title">My Computer</h2>
+                        <p class="card-subtitle">Manage your local computer and connected sessions</p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Computer Name</label>
+                        <input type="text" class="form-input" value="My Desktop" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <div class="connection-status">
+                            <div class="status-dot"></div>
+                            <span>Online</span>
+                        </div>
+                    </div>
+                    <div class="recent-sessions">
+                        <div class="section-header">
+                            <h3 class="section-title">Connected Sessions</h3>
+                            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.8125rem;">
+                                <i class="fas fa-history"></i> View All
+                            </button>
+                        </div>
+                        <div class="session-list">
+                            <div class="session-item">
+                                <div class="session-avatar">JD</div>
+                                <div class="session-info">
+                                    <div class="session-name">John's Desktop</div>
+                                    <div class="session-meta">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Connected now</span>
+                                    </div>
+                                </div>
+                                <div class="session-actions">
+                                    <button class="session-btn" title="Disconnect">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="session-item">
+                                <div class="session-avatar">SM</div>
+                                <div class="session-info">
+                                    <div class="session-name">Sarah's Laptop</div>
+                                    <div class="session-meta">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Connected 1 hour ago</span>
+                                    </div>
+                                </div>
+                                <div class="session-actions">
+                                    <button class="session-btn" title="Disconnect">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Address Book -->
-            <div class="connection-card" id="addressBookContent" style="display: none;">
-                <div class="card-header">
-                    <h2 class="card-title">Address Book</h2>
-                    <p class="card-subtitle">Manage your contacts</p>
-                </div>
-                <div class="session-list">
-                    <div class="session-item">
-                        <div class="session-avatar">JD</div>
-                        <div class="session-info">
-                            <div class="session-name">John Doe</div>
-                            <div class="session-meta">
-                                <i class="fas fa-circle" style="color: var(--online);"></i>
-                                <span>Online</span>
-                            </div>
+            <div class="content-section" id="addressBookContent">
+                <div class="connection-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Address Book</h2>
+                        <p class="card-subtitle">Connect to contacts remotely with high performance</p>
+                    </div>
+                    
+                    <div class="connection-id-container">
+                        <span class="connection-id-label">Your Connection ID</span>
+                        <div class="connection-id" id="addressBookConnectionId">123-456-789</div>
+                        <div class="connection-status">
+                            <div class="status-dot"></div>
+                            <span id="addressBookConnectionStatus">Ready to connect</span>
                         </div>
                     </div>
-                    <div class="session-item">
-                        <div class="session-avatar">SS</div>
-                        <div class="session-info">
-                            <div class="session-name">Sarah Smith</div>
-                            <div class="session-meta">
-                                <i class="fas fa-circle" style="color: var(--away);"></i>
-                                <span>Away</span>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="addressBookCopyIdBtn">
+                            <i class="fas fa-copy"></i> Copy ID
+                        </button>
+                        <button class="btn btn-outline" id="addressBookShareIdBtn">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                    
+                    <div class="connection-form">
+                        <div class="form-group">
+                            <label class="form-label">Connect to Contact</label>
+                            <input type="text" class="form-input" placeholder="Enter contact ID or address" id="addressBookPartnerIdInput">
+                        </div>
+                        <button class="btn btn-primary" id="addressBookConnectBtn" style="width: 100%;">
+                            <i class="fas fa-plug"></i> Connect Now
+                        </button>
+                    </div>
+                    
+                    <div class="recent-sessions">
+                        <div class="section-header">
+                            <h3 class="section-title">Recent Contacts</h3>
+                            <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.8125rem;">
+                                <i class="fas fa-history"></i> View All
+                            </button>
+                        </div>
+                        <div class="session-list">
+                            <div class="session-item">
+                                <div class="session-avatar">JD</div>
+                                <div class="session-info">
+                                    <div class="session-name">John Doe</div>
+                                    <div class="session-meta">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Connected 2 hours ago</span>
+                                    </div>
+                                </div>
+                                <div class="session-actions">
+                                    <button class="session-btn" title="Reconnect">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="session-item">
+                                <div class="session-avatar">SM</div>
+                                <div class="session-info">
+                                    <div class="session-name">Sarah Smith</div>
+                                    <div class="session-meta">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Connected yesterday</span>
+                                    </div>
+                                </div>
+                                <div class="session-actions">
+                                    <button class="session-btn" title="Reconnect">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1183,128 +1325,144 @@
             </div>
 
             <!-- File Transfer -->
-            <div class="connection-card" id="fileTransferContent" style="display: none;">
-                <div class="card-header">
-                    <h2 class="card-title">File Transfer</h2>
-                    <p class="card-subtitle">Securely transfer files to remote computers</p>
-                </div>
-                <div class="file-upload-container" id="fileDropArea">
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 24px; margin-bottom: 12px;"></i>
-                    <p>Drag & drop files or click to select</p>
-                    <input type="file" id="fileInput" multiple style="display: none;">
-                </div>
-                <div class="file-list" id="fileList"></div>
-                <div class="transfer-actions">
-                    <button class="btn btn-primary" id="uploadBtn" style="flex: 1;">
-                        <i class="fas fa-upload"></i> Upload Files
-                    </button>
-                    <button class="btn btn-outline" id="clearFilesBtn" style="flex: 1;">
-                        <i class="fas fa-trash"></i> Clear List
-                    </button>
+            <div class="content-section" id="fileTransferContent">
+                <div class="connection-card">
+                    <div class="card-header">
+                        <h2 class="card-title">File Transfer</h2>
+                        <p class="card-subtitle">Securely transfer files to remote computers</p>
+                    </div>
+                    <div class="file-upload-container" id="fileDropArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 1.5rem; margin-bottom: 12px;"></i>
+                        <p>Drag & drop files or click to select</p>
+                        <input type="file" id="fileInput" multiple style="display: none;">
+                    </div>
+                    <div class="file-list" id="fileList"></div>
+                    <div class="transfer-actions">
+                        <button class="btn btn-primary" id="uploadBtn" style="flex: 1;">
+                            <i class="fas fa-upload"></i> Upload Files
+                        </button>
+                        <button class="btn btn-outline" id="clearFilesBtn" style="flex: 1;">
+                            <i class="fas fa-trash"></i> Clear List
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <!-- Settings -->
-            <div class="connection-card" id="settingsContent" style="display: none;">
-                <div class="card-header">
-                    <h2 class="card-title">Application Settings</h2>
-                    <p class="card-subtitle">Customize your PowerDesk experience</p>
+            <div class="content-section" id="settingsContent">
+                <div class="connection-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Application Settings</h2>
+                        <p class="card-subtitle">Customize your PowerDesk experience</p>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-title">Appearance</h3>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Dark Mode</div>
+                                <div class="setting-description">Switch between light and dark theme</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="darkModeToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Theme Color</div>
+                                <div class="setting-description">Choose your primary color</div>
+                            </div>
+                            <select class="form-input" id="themeColorSelect" style="width: 160px; padding: 10px;">
+                                <option value="#1E88E5">Blue</option>
+                                <option value="#43A047">Green</option>
+                                <option value="#8E24AA">Purple</option>
+                                <option value="#EF5350">Red</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-title">Security</h3>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Two-Factor Authentication</div>
+                                <div class="setting-description">Add extra security to your account</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="twoFactorToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Auto-Lock</div>
+                                <div class="setting-description">Lock app after inactivity</div>
+                            </div>
+                            <select class="form-input" style="width: 160px; padding: 10px;">
+                                <option>Never</option>
+                                <option>5 minutes</option>
+                                <option>15 minutes</option>
+                                <option>30 minutes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3 class="settings-title">Connection</h3>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Quality Preference</div>
+                                <div class="setting-description">Balance between quality and performance</div>
+                            </div>
+                            <select class="form-input" style="width: 160px; padding: 10px;">
+                                <option>Automatic</option>
+                                <option>Best Quality</option>
+                                <option>Best Performance</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Remote Sound</div>
+                                <div class="setting-description">Play sounds from remote computer</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="remoteSoundToggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="saveSettingsBtn" style="width: 100%; margin-top: 24px;">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
                 </div>
-                
-                <div class="settings-section">
-                    <h3 class="settings-title">Appearance</h3>
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Dark Mode</div>
-                            <div class="setting-description">Switch between light and dark theme</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="darkModeToggle">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Theme Color</div>
-                            <div class="setting-description">Choose your primary color</div>
-                        </div>
-                        <select class="form-input" id="themeColorSelect" style="width: 150px; padding: 10px;">
-                            <option value="#0096FF">Blue</option>
-                            <option value="#4CAF50">Green</option>
-                            <option value="#9C27B0">Purple</option>
-                            <option value="#FF4444">Red</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="settings-section">
-                    <h3 class="settings-title">Security</h3>
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Two-Factor Authentication</div>
-                            <div class="setting-description">Add extra security to your account</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="twoFactorToggle">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Auto-Lock</div>
-                            <div class="setting-description">Lock app after inactivity</div>
-                        </div>
-                        <select class="form-input" style="width: 150px; padding: 10px;">
-                            <option>Never</option>
-                            <option>5 minutes</option>
-                            <option>15 minutes</option>
-                            <option>30 minutes</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="settings-section">
-                    <h3 class="settings-title">Connection</h3>
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Quality Preference</div>
-                            <div class="setting-description">Balance between quality and performance</div>
-                        </div>
-                        <select class="form-input" style="width: 150px; padding: 10px;">
-                            <option>Automatic</option>
-                            <option>Best Quality</option>
-                            <option>Best Performance</option>
-                        </select>
-                    </div>
-                    <div class="setting-item">
-                        <div>
-                            <div class="setting-label">Remote Sound</div>
-                            <div class="setting-description">Play sounds from remote computer</div>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="remoteSoundToggle" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                
-                <button class="btn btn-primary" id="saveSettingsBtn" style="width: 100%; margin-top: 24px;">
-                    <i class="fas fa-save"></i> Save Settings
-                </button>
             </div>
 
             <!-- Account -->
-            <div class="connection-card" id="accountContent" style="display: none;">
-                <div class="card-header">
-                    <h2 class="card-title">Account</h2>
-                    <p class="card-subtitle">Manage your account settings</p>
+            <div class="content-section" id="accountContent">
+                <div class="connection-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Account</h2>
+                        <p class="card-subtitle">Manage your account settings</p>
+                    </div>
+                    <div class="profile-section" id="profileSection" style="display: none;">
+                        <div class="profile-avatar" id="profileAvatar"></div>
+                        <div class="profile-name" id="profileName"></div>
+                        <div class="profile-email" id="profileEmail"></div>
+                        <button class="btn btn-outline" id="logoutBtn" style="width: 100%; margin-top: 16px;">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </button>
+                    </div>
+                    <div id="authButtons">
+                        <button class="btn btn-primary" id="loginBtn" style="width: 100%; margin-bottom: 16px;">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                        <button class="btn btn-outline" id="signupBtn" style="width: 100%;">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </div>
                 </div>
-                <button class="btn btn-primary" id="loginBtn" style="width: 100%; margin-bottom: 16px;">
-                    <i class="fas fa-sign-in-alt"></i> Sign In
-                </button>
-                <button class="btn btn-outline" id="signupBtn" style="width: 100%;">
-                    <i class="fas fa-user-plus"></i> Create Account
-                </button>
             </div>
         </div>
 
@@ -1342,7 +1500,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="file-upload-container" id="modalFileDropArea">
-                        <i class="fas fa-cloud-upload-alt" style="font-size: 24px; margin-bottom: 12px;"></i>
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 1.5rem; margin-bottom: 12px;"></i>
                         <p>Drag & drop files or click to select</p>
                         <input type="file" id="modalFileInput" multiple style="display: none;">
                     </div>
@@ -1437,6 +1595,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
+        // Core state
+        let isLoggedIn = false;
+        let userData = null;
+        let filesToUpload = [];
+
         // Core elements
         const sidebar = document.getElementById('sidebar');
         const remoteAddress = document.getElementById('remoteAddress');
@@ -1447,7 +1610,50 @@
         const fileDropArea = document.getElementById('fileDropArea');
         const modalFileDropArea = document.getElementById('modalFileDropArea');
         const userStatus = document.getElementById('userStatus');
-        let filesToUpload = [];
+        const userAvatar = document.getElementById('userAvatar');
+        const profileSection = document.getElementById('profileSection');
+        const authButtons = document.getElementById('authButtons');
+        const addressBar = document.getElementById('addressBar');
+        const userMenu = document.getElementById('userMenu');
+
+        // Initialize app
+        function initializeApp() {
+            updateAuthState();
+            showSection('account');
+        }
+
+        // Update authentication state
+        function updateAuthState() {
+            if (isLoggedIn && userData) {
+                addressBar.style.display = 'block';
+                userMenu.style.display = 'flex';
+                profileSection.style.display = 'block';
+                authButtons.style.display = 'none';
+                const initials = userData.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                userAvatar.textContent = initials;
+                document.getElementById('profileAvatar').textContent = initials;
+                document.getElementById('profileName').textContent = userData.name;
+                document.getElementById('profileEmail').textContent = userData.email;
+            } else {
+                addressBar.style.display = 'none';
+                userMenu.style.display = 'none';
+                profileSection.style.display = 'none';
+                authButtons.style.display = 'block';
+            }
+        }
+
+        // Show specific section
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById(`${sectionId}Content`).classList.add('active');
+            document.querySelector(`.nav-item[data-section="${sectionId}"]`).classList.add('active');
+            sidebar.classList.remove('active');
+        }
 
         // Notification
         function showNotification(title, message, type) {
@@ -1465,6 +1671,7 @@
 
         // User status simulation
         setInterval(() => {
+            if (!isLoggedIn) return;
             const statuses = ['status-online', 'status-away', 'status-offline'];
             const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
             userStatus.className = 'status-dot ' + randomStatus;
@@ -1482,20 +1689,27 @@
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                document.querySelectorAll('.connection-card').forEach(card => card.style.display = 'none');
-                document.getElementById(`${item.dataset.section}Content`).style.display = 'block';
+                if (!isLoggedIn && item.dataset.section !== 'account') {
+                    showNotification('Error', 'Please login first', 'danger');
+                    showSection('account');
+                    return;
+                }
+                showSection(item.dataset.section);
             });
         });
 
         // Dynamic address bar
         remoteAddress.addEventListener('input', () => {
             document.getElementById('partnerIdInput').value = remoteAddress.value;
+            document.getElementById('addressBookPartnerIdInput').value = remoteAddress.value;
         });
 
         document.getElementById('partnerIdInput').addEventListener('input', () => {
             remoteAddress.value = document.getElementById('partnerIdInput').value;
+        });
+
+        document.getElementById('addressBookPartnerIdInput').addEventListener('input', () => {
+            remoteAddress.value = document.getElementById('addressBookPartnerIdInput').value;
         });
 
         // File handling
@@ -1517,6 +1731,10 @@
         }
 
         function handleFiles(files, list) {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to upload files', 'danger');
+                return;
+            }
             Array.from(files).forEach(file => {
                 filesToUpload.push(file);
                 const fileItem = document.createElement('div');
@@ -1568,6 +1786,10 @@
 
         // Upload files
         function uploadFiles(list, input) {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to upload files', 'danger');
+                return;
+            }
             if (!filesToUpload.length) {
                 showNotification('No Files', 'Please select files to upload', 'warning');
                 return;
@@ -1611,8 +1833,19 @@
 
         // Screenshot
         document.getElementById('screenshotBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to take screenshots', 'danger');
+                return;
+            }
             hiddenPanel.classList.remove('show');
-            html2canvas(document.body).then(canvas => {
+            const mainContent = document.querySelector('.main-content');
+            html2canvas(mainContent, {
+                scale: window.devicePixelRatio,
+                width: mainContent.offsetWidth,
+                height: mainContent.offsetHeight,
+                scrollX: 0,
+                scrollY: 0
+            }).then(canvas => {
                 canvas.toBlob(blob => {
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
@@ -1627,11 +1860,29 @@
 
         // Screen sharing
         document.getElementById('shareBtn').addEventListener('click', async () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to share screen', 'danger');
+                return;
+            }
             hiddenPanel.classList.remove('show');
             try {
-                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { 
+                        cursor: "always",
+                        displaySurface: "monitor"
+                    },
+                    audio: true
+                });
+                const video = document.createElement('video');
+                video.srcObject = stream;
+                video.style.display = 'none';
+                document.body.appendChild(video);
+                video.play();
+                
                 showNotification('Screen Sharing', 'Started sharing screen', 'success');
+                
                 stream.getVideoTracks()[0].onended = () => {
+                    video.remove();
                     showNotification('Screen Sharing', 'Stopped sharing screen', 'warning');
                 };
             } catch (err) {
@@ -1641,9 +1892,16 @@
 
         // Screen recording
         document.getElementById('recordBtn').addEventListener('click', async () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to record screen', 'danger');
+                return;
+            }
             hiddenPanel.classList.remove('show');
             try {
-                const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: { cursor: "always" },
+                    audio: true
+                });
                 const recorder = new MediaRecorder(stream);
                 const chunks = [];
                 recorder.ondataavailable = e => chunks.push(e.data);
@@ -1659,7 +1917,7 @@
                 };
                 recorder.start();
                 showNotification('Recording', 'Started recording screen', 'success');
-                setTimeout(() => recorder.stop(), 10000); // Auto-stop after 10s for demo
+                setTimeout(() => recorder.stop(), 10000);
             } catch (err) {
                 showNotification('Error', 'Failed to start recording', 'danger');
             }
@@ -1668,19 +1926,61 @@
         // File transfer modal
         document.getElementById('fileBtn').addEventListener('click', (e) => {
             e.preventDefault();
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to transfer files', 'danger');
+                return;
+            }
             hiddenPanel.classList.remove('show');
             document.getElementById('fileModal').classList.add('show');
         });
 
         // Copy and Share ID
         document.getElementById('copyIdBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to copy ID', 'danger');
+                return;
+            }
             navigator.clipboard.writeText(document.getElementById('connectionId').textContent.replace(/-/g, '')).then(() => {
                 showNotification('Copied', 'Connection ID copied to clipboard', 'success');
             });
         });
 
         document.getElementById('shareIdBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to share ID', 'danger');
+                return;
+            }
             const id = document.getElementById('connectionId').textContent.replace(/-/g, '');
+            if (navigator.share) {
+                navigator.share({
+                    title: 'PowerDesk Connection ID',
+                    text: `Connect using ID: ${id}`,
+                }).then(() => showNotification('Shared', 'ID shared successfully', 'success'))
+                 .catch(() => showNotification('Error', 'Failed to share ID', 'danger'));
+            } else {
+                navigator.clipboard.writeText(id).then(() => {
+                    showNotification('Copied', 'ID copied (share not supported)', 'warning');
+                });
+            }
+        });
+
+        // Address Book Copy and Share ID
+        document.getElementById('addressBookCopyIdBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to copy ID', 'danger');
+                return;
+            }
+            navigator.clipboard.writeText(document.getElementById('addressBookConnectionId').textContent.replace(/-/g, '')).then(() => {
+                showNotification('Copied', 'Connection ID copied to clipboard', 'success');
+            });
+        });
+
+        document.getElementById('addressBookShareIdBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to share ID', 'danger');
+                return;
+            }
+            const id = document.getElementById('addressBookConnectionId').textContent.replace(/-/g, '');
             if (navigator.share) {
                 navigator.share({
                     title: 'PowerDesk Connection ID',
@@ -1696,6 +1996,10 @@
 
         // Connect
         document.getElementById('connectBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to connect', 'danger');
+                return;
+            }
             const partnerId = document.getElementById('partnerIdInput').value.trim();
             if (!partnerId) {
                 showNotification('Error', 'Please enter a partner ID', 'danger');
@@ -1705,25 +2009,53 @@
             showNotification('Connecting', `Establishing connection to ${partnerId}`, 'success');
         });
 
+        document.getElementById('addressBookConnectBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to connect', 'danger');
+                return;
+            }
+            const partnerId = document.getElementById('addressBookPartnerIdInput').value.trim();
+            if (!partnerId) {
+                showNotification('Error', 'Please enter a partner ID', 'danger');
+                return;
+            }
+            remoteAddress.value = partnerId;
+            showNotification('Connecting', `Establishing connection to ${partnerId}`, 'success');
+        });
+
         document.getElementById('connectTopBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to connect', 'danger');
+                return;
+            }
             const partnerId = remoteAddress.value.trim();
             if (!partnerId) {
                 showNotification('Error', 'Please enter a partner ID', 'danger');
                 return;
             }
             document.getElementById('partnerIdInput').value = partnerId;
+            document.getElementById('addressBookPartnerIdInput').value = partnerId;
             showNotification('Connecting', `Establishing connection to ${partnerId}`, 'success');
         });
 
         // Disconnect
         document.getElementById('disconnectTopBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to disconnect', 'danger');
+                return;
+            }
             showNotification('Disconnected', 'Connection terminated', 'warning');
             remoteAddress.value = '';
             document.getElementById('partnerIdInput').value = '';
+            document.getElementById('addressBookPartnerIdInput').value = '';
         });
 
         // Refresh
         document.getElementById('refreshTopBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to refresh', 'danger');
+                return;
+            }
             showNotification('Refreshed', 'Connection status updated', 'success');
         });
 
@@ -1771,7 +2103,14 @@
                 showNotification('Error', 'Please fill in all fields', 'danger');
                 return;
             }
+            isLoggedIn = true;
+            userData = {
+                name: email.split('@')[0],
+                email: email
+            };
             document.getElementById('loginModal').classList.remove('show');
+            updateAuthState();
+            showSection('home');
             showNotification('Login Successful', 'You have been signed in to PowerDesk', 'success');
         });
 
@@ -1789,16 +2128,28 @@
                 showNotification('Error', 'Passwords do not match', 'danger');
                 return;
             }
+            isLoggedIn = true;
+            userData = { name, email };
             document.getElementById('signupModal').classList.remove('show');
-            document.getElementById('loginModal').classList.add('show');
-            showNotification('Account Created', 'Please sign in with your new account', 'success');
+            updateAuthState();
+            showSection('home');
+            showNotification('Account Created', 'You have been signed in to PowerDesk', 'success');
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            isLoggedIn = false;
+            userData = null;
+            updateAuthState();
+            showSection('account');
+            showNotification('Logged Out', 'You have been signed out', 'warning');
         });
 
         // Settings save
         document.getElementById('saveSettingsBtn').addEventListener('click', () => {
             const themeColor = document.getElementById('themeColorSelect').value;
             document.documentElement.style.setProperty('--primary', themeColor);
-            document.documentElement.style.setProperty('--primary-dark', darkenColor(themeColor, 10));
+            document.documentElement.style.setProperty('--primary-dark', darkenColor(themeColor, 15));
             showNotification('Settings Saved', 'Your preferences have been updated', 'success');
         });
 
@@ -1810,16 +2161,16 @@
             return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
         }
 
+        // Dark mode
+        document.getElementById('darkModeToggle').addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
         // Close modals on outside click
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal')) {
                 document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
             }
-        });
-
-        // Dark mode
-        document.getElementById('darkModeToggle').addEventListener('change', () => {
-            document.body.classList.toggle('dark-mode');
         });
 
         // Responsive handling
@@ -1828,6 +2179,9 @@
                 sidebar.classList.remove('active');
             }
         });
+
+        // Initialize
+        initializeApp();
     </script>
 </body>
 </html>
