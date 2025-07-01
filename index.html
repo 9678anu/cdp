@@ -1603,6 +1603,7 @@
         let isLoggedIn = false;
         let userData = null;
         let filesToUpload = [];
+        let pendingConnections = {};
 
         // Core elements
         const sidebar = document.getElementById('sidebar');
@@ -1626,6 +1627,18 @@
             showSection('account');
         }
 
+        // Helper function to generate unique ID from email
+        function generateUniqueId(email) {
+            // Simple hash function to create a consistent ID from email
+            let hash = 0;
+            for (let i = 0; i < email.length; i++) {
+                hash = (hash << 5) - hash + email.charCodeAt(i);
+                hash |= 0; // Convert to 32bit integer
+            }
+            // Format as XXX-XXX-XXX
+            return `${Math.abs(hash % 1000)}-${Math.abs((hash >> 10) % 1000)}-${Math.abs((hash >> 20) % 1000)}`;
+        }
+
         // Update authentication state
         function updateAuthState() {
             if (isLoggedIn && userData) {
@@ -1638,6 +1651,12 @@
                 document.getElementById('profileAvatar').textContent = initials;
                 document.getElementById('profileName').textContent = userData.name;
                 document.getElementById('profileEmail').textContent = userData.email;
+                
+                // Generate unique connection ID based on user email
+                const uniqueId = generateUniqueId(userData.email);
+                document.getElementById('connectionId').textContent = uniqueId;
+                document.getElementById('addressBookConnectionId').textContent = uniqueId;
+                remoteAddress.placeholder = `${userData.email} or Partner ID`;
             } else {
                 addressBar.style.display = 'none';
                 userMenu.style.display = 'none';
@@ -1938,6 +1957,91 @@
             document.getElementById('fileModal').classList.add('show');
         });
 
+        // Function to send connection request
+        function sendConnectionRequest(partnerId) {
+            showNotification('Request Sent', `Connection request sent to ${partnerId}`, 'success');
+            
+            // In a real app, this would be a server call
+            setTimeout(() => {
+                // Simulate response after 2 seconds
+                if (Math.random() > 0.3) { // 70% chance of success for demo
+                    showNotification('Connection Established', `Connected to ${partnerId}`, 'success');
+                    document.getElementById('connectionStatus').textContent = `Connected to ${partnerId}`;
+                    document.getElementById('addressBookConnectionStatus').textContent = `Connected to ${partnerId}`;
+                } else {
+                    showNotification('Request Denied', `${partnerId} rejected your connection`, 'danger');
+                }
+            }, 2000);
+        }
+
+        // Function to handle incoming connection requests
+        function handleIncomingRequest(requestId) {
+            if (confirm(`Accept connection request from ${requestId}?`)) {
+                showNotification('Connection Accepted', `Now connected to ${requestId}`, 'success');
+                document.getElementById('connectionStatus').textContent = `Connected to ${requestId}`;
+                document.getElementById('addressBookConnectionStatus').textContent = `Connected to ${requestId}`;
+                remoteAddress.value = requestId;
+                document.getElementById('partnerIdInput').value = requestId;
+                document.getElementById('addressBookPartnerIdInput').value = requestId;
+            } else {
+                showNotification('Connection Rejected', `You rejected ${requestId}`, 'warning');
+            }
+        }
+
+        // Simulate receiving a connection request when someone tries to connect to you
+        function simulateIncomingRequest() {
+            if (!isLoggedIn) return;
+            
+            // Randomly simulate incoming requests (for demo)
+            if (Math.random() > 0.95) { // 5% chance every 10 seconds
+                const fakeRequestId = `${Math.floor(Math.random()*1000)}-${Math.floor(Math.random()*1000)}-${Math.floor(Math.random()*1000)}`;
+                setTimeout(() => handleIncomingRequest(fakeRequestId), 1000);
+            }
+        }
+
+        // Check for incoming requests periodically
+        setInterval(simulateIncomingRequest, 10000);
+
+        // Connect button handlers
+        document.getElementById('connectBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to connect', 'danger');
+                return;
+            }
+            const partnerId = document.getElementById('partnerIdInput').value.trim();
+            if (!partnerId) {
+                showNotification('Error', 'Please enter a partner ID', 'danger');
+                return;
+            }
+            sendConnectionRequest(partnerId);
+        });
+
+        document.getElementById('addressBookConnectBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to connect', 'danger');
+                return;
+            }
+            const partnerId = document.getElementById('addressBookPartnerIdInput').value.trim();
+            if (!partnerId) {
+                showNotification('Error', 'Please enter a partner ID', 'danger');
+                return;
+            }
+            sendConnectionRequest(partnerId);
+        });
+
+        document.getElementById('connectTopBtn').addEventListener('click', () => {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to connect', 'danger');
+                return;
+            }
+            const partnerId = remoteAddress.value.trim();
+            if (!partnerId) {
+                showNotification('Error', 'Please enter a partner ID', 'danger');
+                return;
+            }
+            sendConnectionRequest(partnerId);
+        });
+
         // Copy and Share ID
         document.getElementById('copyIdBtn').addEventListener('click', () => {
             if (!isLoggedIn) {
@@ -1998,50 +2102,6 @@
             }
         });
 
-        // Connect
-        document.getElementById('connectBtn').addEventListener('click', () => {
-            if (!isLoggedIn) {
-                showNotification('Error', 'Please login to connect', 'danger');
-                return;
-            }
-            const partnerId = document.getElementById('partnerIdInput').value.trim();
-            if (!partnerId) {
-                showNotification('Error', 'Please enter a partner ID', 'danger');
-                return;
-            }
-            remoteAddress.value = partnerId;
-            showNotification('Connecting', `Establishing connection to ${partnerId}`, 'success');
-        });
-
-        document.getElementById('addressBookConnectBtn').addEventListener('click', () => {
-            if (!isLoggedIn) {
-                showNotification('Error', 'Please login to connect', 'danger');
-                return;
-            }
-            const partnerId = document.getElementById('addressBookPartnerIdInput').value.trim();
-            if (!partnerId) {
-                showNotification('Error', 'Please enter a partner ID', 'danger');
-                return;
-            }
-            remoteAddress.value = partnerId;
-            showNotification('Connecting', `Establishing connection to ${partnerId}`, 'success');
-        });
-
-        document.getElementById('connectTopBtn').addEventListener('click', () => {
-            if (!isLoggedIn) {
-                showNotification('Error', 'Please login to connect', 'danger');
-                return;
-            }
-            const partnerId = remoteAddress.value.trim();
-            if (!partnerId) {
-                showNotification('Error', 'Please enter a partner ID', 'danger');
-                return;
-            }
-            document.getElementById('partnerIdInput').value = partnerId;
-            document.getElementById('addressBookPartnerIdInput').value = partnerId;
-            showNotification('Connecting', `Establishing connection to ${partnerId}`, 'success');
-        });
-
         // Disconnect
         document.getElementById('disconnectTopBtn').addEventListener('click', () => {
             if (!isLoggedIn) {
@@ -2052,6 +2112,8 @@
             remoteAddress.value = '';
             document.getElementById('partnerIdInput').value = '';
             document.getElementById('addressBookPartnerIdInput').value = '';
+            document.getElementById('connectionStatus').textContent = 'Ready to connect';
+            document.getElementById('addressBookConnectionStatus').textContent = 'Ready to connect';
         });
 
         // Refresh
@@ -2116,6 +2178,10 @@
             updateAuthState();
             showSection('home');
             showNotification('Login Successful', 'You have been signed in to PowerDesk', 'success');
+            
+            // Initialize connection status
+            document.getElementById('connectionStatus').textContent = 'Ready to connect';
+            document.getElementById('addressBookConnectionStatus').textContent = 'Ready to connect';
         });
 
         document.getElementById('modalSignupForm').addEventListener('submit', (e) => {
@@ -2138,6 +2204,10 @@
             updateAuthState();
             showSection('home');
             showNotification('Account Created', 'You have been signed in to PowerDesk', 'success');
+            
+            // Initialize connection status
+            document.getElementById('connectionStatus').textContent = 'Ready to connect';
+            document.getElementById('addressBookConnectionStatus').textContent = 'Ready to connect';
         });
 
         // Logout
