@@ -182,23 +182,26 @@
         }
 
         /* Sidebar */
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--white);
-            border-right: 1px solid var(--border);
-            overflow-y: auto;
-            transform: translateX(0);
-            transition: transform var(--transition);
-            position: fixed;
-            top: 64px;
-            left: 0;
-            z-index: 900;
-            height: calc(100vh - 64px);
-        }
+ .sidebar {
+        width: var(--sidebar-width);
+        background: var(--white);
+        border-right: 1px solid var(--border);
+        overflow-y: auto;
+        transform: translateX(0);
+        transition: transform var(--transition);
+        position: fixed;
+        top: 64px;
+        left: 0;
+        z-index: 900;
+        /* Removed fixed height: calc(100vh - 64px) */
+        height: auto;
+        min-height: calc(100vh - 64px); /* Ensures it takes at least full viewport height minus top bar */
+    }
 
-        .sidebar.hidden {
-            transform: translateX(-100%);
-        }
+    .sidebar.hidden {
+        transform: translateX(-100%);
+    }
+
 
         .nav-section {
             padding: 24px 0;
@@ -254,14 +257,15 @@
         }
 
         /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 32px;
-            background: var(--secondary);
-            min-height: calc(100vh - 64px);
-            max-width: 1120px;
-            margin-left: var(--sidebar-width);
-        }
+       .main-content {
+        flex: 1;
+        padding: 32px;
+        background: var(--secondary);
+        min-height: calc(100vh - 64px); /* Ensures content takes full height */
+        max-width: 1120px;
+        margin-left: var(--sidebar-width);
+        /* Removed any explicit height */
+    }
 
         .content-section {
             display: none;
