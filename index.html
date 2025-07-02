@@ -182,26 +182,24 @@
         }
 
         /* Sidebar */
- .sidebar {
-        width: var(--sidebar-width);
-        background: var(--white);
-        border-right: 1px solid var(--border);
-        overflow-y: auto;
-        transform: translateX(0);
-        transition: transform var(--transition);
-        position: fixed;
-        top: 64px;
-        left: 0;
-        z-index: 900;
-        /* Removed fixed height: calc(100vh - 64px) */
-        height: auto;
-        min-height: calc(100vh - 64px); /* Ensures it takes at least full viewport height minus top bar */
-    }
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            transform: translateX(0);
+            transition: transform var(--transition);
+            position: fixed;
+            top: 64px;
+            left: 0;
+            z-index: 900;
+            height: auto;
+            min-height: calc(100vh - 64px);
+        }
 
-    .sidebar.hidden {
-        transform: translateX(-100%);
-    }
-
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
 
         .nav-section {
             padding: 24px 0;
@@ -257,15 +255,14 @@
         }
 
         /* Main Content */
-       .main-content {
-        flex: 1;
-        padding: 32px;
-        background: var(--secondary);
-        min-height: calc(100vh - 64px); /* Ensures content takes full height */
-        max-width: 1120px;
-        margin-left: var(--sidebar-width);
-        /* Removed any explicit height */
-    }
+        .main-content {
+            flex: 1;
+            padding: 32px;
+            background: var(--secondary);
+            min-height: calc(100vh - 64px);
+            max-width: 1120px;
+            margin-left: var(--sidebar-width);
+        }
 
         .content-section {
             display: none;
@@ -1024,7 +1021,7 @@
         
         <div class="address-bar" id="addressBar" style="display: none;">
             <i class="fas fa-search address-icon"></i>
-            <input type="text" class="address-input" placeholder="user@example.com or Partner ID" id="remoteAddress">
+            <input type="text" class="address-input" id="remoteAddress">
         </div>
         
         <div class="top-actions">
@@ -1131,7 +1128,7 @@
                     <div class="connection-form">
                         <div class="form-group">
                             <label class="form-label">Connect to Remote Partner</label>
-                            <input type="text" class="form-input" placeholder="Enter partner ID or address" id="partnerIdInput">
+                            <input type="text" class="form-input" id="partnerIdInput">
                         </div>
                         <button class="btn btn-primary" id="connectBtn" style="width: 100%;">
                             <i class="fas fa-plug"></i> Connect Now
@@ -1278,7 +1275,7 @@
                     <div class="connection-form">
                         <div class="form-group">
                             <label class="form-label">Connect to Contact</label>
-                            <input type="text" class="form-input" placeholder="Enter contact ID or address" id="addressBookPartnerIdInput">
+                            <input type="text" class="form-input"  id="addressBookPartnerIdInput">
                         </div>
                         <button class="btn btn-primary" id="addressBookConnectBtn" style="width: 100%;">
                             <i class="fas fa-plug"></i> Connect Now
@@ -1532,11 +1529,11 @@
                     <form id="modalLoginForm" class="modal-form">
                         <div class="form-group">
                             <label class="form-label">Email Address</label>
-                            <input type="email" class="form-input" placeholder="your@email.com" id="loginEmail" required>
+                            <input type="email" class="form-input"  id="loginEmail" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Password</label>
-                            <input type="password" class="form-input" placeholder="••••••••" id="loginPassword" required>
+                            <input type="password" class="form-input"  id="loginPassword" required>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%;">
                             <i class="fas fa-sign-in-alt"></i> Sign In
@@ -1561,19 +1558,19 @@
                     <form id="modalSignupForm" class="modal-form">
                         <div class="form-group">
                             <label class="form-label">Full Name</label>
-                            <input type="text" class="form-input" placeholder="John Doe" id="signupName" required>
+                            <input type="text" class="form-input"  id="signupName" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Email Address</label>
-                            <input type="email" class="form-input" placeholder="your@email.com" id="signupEmail" required>
+                            <input type="email" class="form-input"  id="signupEmail" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Password</label>
-                            <input type="password" class="form-input" placeholder="••••••••" id="signupPassword" required>
+                            <input type="password" class="form-input" id="signupPassword" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Confirm Password</label>
-                            <input type="password" class="form-input" placeholder="••••••••" id="signupConfirmPassword" required>
+                            <input type="password" class="form-input"id="signupConfirmPassword" required>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%;">
                             <i class="fas fa-user-plus"></i> Create Account
@@ -1599,6 +1596,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
+        // Initialize WebSocket connection
+        const socket = new WebSocket('wss://your-backend-server.com'); // Replace with your WebSocket server URL
+
         // Core state
         let isLoggedIn = false;
         let userData = null;
@@ -1629,13 +1629,11 @@
 
         // Helper function to generate unique ID from email
         function generateUniqueId(email) {
-            // Simple hash function to create a consistent ID from email
             let hash = 0;
             for (let i = 0; i < email.length; i++) {
                 hash = (hash << 5) - hash + email.charCodeAt(i);
-                hash |= 0; // Convert to 32bit integer
+                hash |= 0;
             }
-            // Format as XXX-XXX-XXX
             return `${Math.abs(hash % 1000)}-${Math.abs((hash >> 10) % 1000)}-${Math.abs((hash >> 20) % 1000)}`;
         }
 
@@ -1652,7 +1650,6 @@
                 document.getElementById('profileName').textContent = userData.name;
                 document.getElementById('profileEmail').textContent = userData.email;
                 
-                // Generate unique connection ID based on user email
                 const uniqueId = generateUniqueId(userData.email);
                 document.getElementById('connectionId').textContent = uniqueId;
                 document.getElementById('addressBookConnectionId').textContent = uniqueId;
@@ -1692,16 +1689,36 @@
             document.getElementById('notification').classList.remove('show');
         });
 
-        // User status simulation
-        setInterval(() => {
-            if (!isLoggedIn) return;
-            const statuses = ['status-online', 'status-away', 'status-offline'];
-            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-            userStatus.className = 'status-dot ' + randomStatus;
-            if (randomStatus === 'status-online') {
-                showNotification('User Online', 'Your computer is now online', 'success');
+        // WebSocket event handlers
+        socket.onopen = () => {
+            showNotification('Connected', 'WebSocket connection established', 'success');
+        };
+
+        socket.onclose = () => {
+            showNotification('Disconnected', 'WebSocket connection closed', 'warning');
+        };
+
+        socket.onerror = (error) => {
+            showNotification('Error', 'WebSocket error occurred', 'danger');
+            console.error('WebSocket error:', error);
+        };
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'connection-request') {
+                handleIncomingRequest(data.from);
+            } else if (data.type === 'connection-response') {
+                if (data.accepted) {
+                    showNotification('Connection Established', `Connected to ${data.from}`, 'success');
+                    document.getElementById('connectionStatus').textContent = `Connected to ${data.from}`;
+                    document.getElementById('addressBookConnectionStatus').textContent = `Connected to ${data.from}`;
+                } else {
+                    showNotification('Request Denied', `${data.from} rejected your connection`, 'danger');
+                }
+            } else if (data.type === 'error') {
+                showNotification('Error', data.message || 'Connection error', 'danger');
             }
-        }, 15000);
+        };
 
         // Sidebar toggle
         document.getElementById('toggleSidebar').addEventListener('click', () => {
@@ -1959,24 +1976,35 @@
 
         // Function to send connection request
         function sendConnectionRequest(partnerId) {
+            if (!isLoggedIn) {
+                showNotification('Error', 'Please login to connect', 'danger');
+                return;
+            }
+            if (!partnerId) {
+                showNotification('Error', 'Please enter a partner ID', 'danger');
+                return;
+            }
+            if (socket.readyState !== WebSocket.OPEN) {
+                showNotification('Error', 'WebSocket connection not available', 'danger');
+                return;
+            }
+            socket.send(JSON.stringify({
+                type: 'connection-request',
+                from: userData.email,
+                to: partnerId
+            }));
             showNotification('Request Sent', `Connection request sent to ${partnerId}`, 'success');
-            
-            // In a real app, this would be a server call
-            setTimeout(() => {
-                // Simulate response after 2 seconds
-                if (Math.random() > 0.3) { // 70% chance of success for demo
-                    showNotification('Connection Established', `Connected to ${partnerId}`, 'success');
-                    document.getElementById('connectionStatus').textContent = `Connected to ${partnerId}`;
-                    document.getElementById('addressBookConnectionStatus').textContent = `Connected to ${partnerId}`;
-                } else {
-                    showNotification('Request Denied', `${partnerId} rejected your connection`, 'danger');
-                }
-            }, 2000);
         }
 
         // Function to handle incoming connection requests
         function handleIncomingRequest(requestId) {
             if (confirm(`Accept connection request from ${requestId}?`)) {
+                socket.send(JSON.stringify({
+                    type: 'connection-response',
+                    from: userData.email,
+                    to: requestId,
+                    accepted: true
+                }));
                 showNotification('Connection Accepted', `Now connected to ${requestId}`, 'success');
                 document.getElementById('connectionStatus').textContent = `Connected to ${requestId}`;
                 document.getElementById('addressBookConnectionStatus').textContent = `Connected to ${requestId}`;
@@ -1984,61 +2012,29 @@
                 document.getElementById('partnerIdInput').value = requestId;
                 document.getElementById('addressBookPartnerIdInput').value = requestId;
             } else {
+                socket.send(JSON.stringify({
+                    type: 'connection-response',
+                    from: userData.email,
+                    to: requestId,
+                    accepted: false
+                }));
                 showNotification('Connection Rejected', `You rejected ${requestId}`, 'warning');
             }
         }
 
-        // Simulate receiving a connection request when someone tries to connect to you
-        function simulateIncomingRequest() {
-            if (!isLoggedIn) return;
-            
-            // Randomly simulate incoming requests (for demo)
-            if (Math.random() > 0.95) { // 5% chance every 10 seconds
-                const fakeRequestId = `${Math.floor(Math.random()*1000)}-${Math.floor(Math.random()*1000)}-${Math.floor(Math.random()*1000)}`;
-                setTimeout(() => handleIncomingRequest(fakeRequestId), 1000);
-            }
-        }
-
-        // Check for incoming requests periodically
-        setInterval(simulateIncomingRequest, 10000);
-
         // Connect button handlers
         document.getElementById('connectBtn').addEventListener('click', () => {
-            if (!isLoggedIn) {
-                showNotification('Error', 'Please login to connect', 'danger');
-                return;
-            }
             const partnerId = document.getElementById('partnerIdInput').value.trim();
-            if (!partnerId) {
-                showNotification('Error', 'Please enter a partner ID', 'danger');
-                return;
-            }
             sendConnectionRequest(partnerId);
         });
 
         document.getElementById('addressBookConnectBtn').addEventListener('click', () => {
-            if (!isLoggedIn) {
-                showNotification('Error', 'Please login to connect', 'danger');
-                return;
-            }
             const partnerId = document.getElementById('addressBookPartnerIdInput').value.trim();
-            if (!partnerId) {
-                showNotification('Error', 'Please enter a partner ID', 'danger');
-                return;
-            }
             sendConnectionRequest(partnerId);
         });
 
         document.getElementById('connectTopBtn').addEventListener('click', () => {
-            if (!isLoggedIn) {
-                showNotification('Error', 'Please login to connect', 'danger');
-                return;
-            }
             const partnerId = remoteAddress.value.trim();
-            if (!partnerId) {
-                showNotification('Error', 'Please enter a partner ID', 'danger');
-                return;
-            }
             sendConnectionRequest(partnerId);
         });
 
@@ -2174,6 +2170,15 @@
                 name: email.split('@')[0],
                 email: email
             };
+            // Register with WebSocket server
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify({
+                    type: 'register',
+                    email: email
+                }));
+            } else {
+                showNotification('Error', 'WebSocket connection not available', 'danger');
+            }
             document.getElementById('loginModal').classList.remove('show');
             updateAuthState();
             showSection('home');
